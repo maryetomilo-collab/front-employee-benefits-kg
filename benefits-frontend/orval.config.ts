@@ -1,0 +1,17 @@
+import { defineConfig } from 'orval';
+
+export default defineConfig({
+  petstore: {
+    output: {
+      mode: 'tags-split',
+      target: 'src/api/endpoints',
+      schemas: 'src/api/schemas',
+      client: 'react-query',
+      clean: true,
+      formatter: 'prettier',
+    },
+    input: {
+      target: './openapi/api.yaml',
+    },
+  },
+});

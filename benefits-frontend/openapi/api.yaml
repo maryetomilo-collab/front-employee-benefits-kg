@@ -1,0 +1,117 @@
+openapi: 3.0.3
+
+info:
+  title: Employee Benefits API
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:8080
+
+tags:
+  - name: Partner Registration
+    description: Регистрация партнёра и управление черновиком регистрации
+
+paths:
+  /api/partner-registration-drafts/business-info:
+    post:
+      tags:
+        - Partner Registration
+      summary: Create partner registration draft with business info
+      operationId: createPartnerRegistrationDraftWithBusinessInfo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePartnerRegistrationDraftBusinessInfoRequest'
+      responses:
+        '201':
+          description: Partner registration draft created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerRegistrationDraftStepResponse'
+
+components:
+  schemas:
+    CreatePartnerRegistrationDraftBusinessInfoRequest:
+      type: object
+      required:
+        - businessName
+        - category
+      properties:
+        businessName:
+          type: string
+          minLength: 2
+          maxLength: 255
+          example: Sierra Coffee
+
+        description:
+          type: string
+          maxLength: 2000
+          nullable: true
+          example: Кофейня в центре Бишкека
+
+        category:
+          $ref: '#/components/schemas/PartnerCategory'
+
+        logoUrl:
+          type: string
+          format: uri
+          maxLength: 1000
+          nullable: true
+          example: https://cdn.example.com/logos/sierra.png
+
+    PartnerRegistrationDraftStepResponse:
+      type: object
+      required:
+        - draftId
+        - status
+        - currentStep
+        - completedSteps
+      properties:
+        draftId:
+          type: string
+          format: uuid
+          example: 0f2b5d4e-1d1a-4e3e-9c2b-6a7f9d123abc
+
+        status:
+          $ref: '#/components/schemas/PartnerRegistrationDraftStatus'
+
+        currentStep:
+          $ref: '#/components/schemas/PartnerRegistrationStep'
+
+        completedSteps:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerRegistrationStep'
+          example:
+            - BUSINESS_INFO
+
+    PartnerCategory:
+      type: string
+      enum:
+        - COFFEE_SHOP
+        - RESTAURANT
+        - FITNESS
+        - BEAUTY
+        - EDUCATION
+        - HEALTH
+        - ENTERTAINMENT
+        - OTHER
+
+    PartnerRegistrationDraftStatus:
+      type: string
+      enum:
+        - DRAFT
+        - SUBMITTED
+        - CANCELLED
+        - EXPIRED
+
+    PartnerRegistrationStep:
+      type: string
+      enum:
+        - BUSINESS_INFO
+        - CONTACTS
+        - LOCATIONS
+        - REVIEW
