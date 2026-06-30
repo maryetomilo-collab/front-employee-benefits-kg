@@ -52,6 +52,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/PartnerRegistrationDraftResponse'
 
+  /api/partner-registration/drafts/{draftId}:
+    get:
+      tags:
+        - Partner Registration
+      summary: Get partner registration draft
+      operationId: getPartnerRegistrationDraft
+      parameters:
+        - name: draftId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Partner registration draft found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPartnerRegistrationDraftResponse'
+
 components:
   schemas:
     SavePartnerRegistrationDraftBusinessInfoRequest:
@@ -131,3 +152,71 @@ components:
         - HEALTH
         - ENTERTAINMENT
         - OTHER
+
+    GetPartnerRegistrationDraftResponse:
+      type: object
+      required:
+        - draftId
+        - status
+        - completedSteps
+      properties:
+        draftId:
+          type: string
+          format: uuid
+          example: 7f4b6b3e-2d62-4d8e-b0d5-35f8c7c91a11
+
+        status:
+          type: string
+          example: DRAFT
+
+        completedSteps:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerRegistrationStep'
+          example:
+            - BUSINESS_INFO
+            - CONTACTS
+
+        businessInfo:
+          $ref: '#/components/schemas/PartnerRegistrationDraftBusinessInfo'
+
+        contacts:
+          $ref: '#/components/schemas/PartnerRegistrationDraftContacts'
+
+    PartnerRegistrationDraftBusinessInfo:
+      type: object
+      properties:
+        businessName:
+          type: string
+          example: Sierra Coffee
+
+        description:
+          type: string
+          nullable: true
+          example: Кофейня в центре Бишкека
+
+        category:
+          $ref: '#/components/schemas/PartnerCategory'
+
+    PartnerRegistrationDraftContacts:
+      type: object
+      properties:
+        contactName:
+          type: string
+          example: Азамат
+
+        contactPhone:
+          type: string
+          example: "+996700123456"
+
+        contactEmail:
+          type: string
+          format: email
+          nullable: true
+          example: partner@example.kg
+
+    PartnerRegistrationStep:
+      type: string
+      enum:
+        - BUSINESS_INFO
+        - CONTACTS

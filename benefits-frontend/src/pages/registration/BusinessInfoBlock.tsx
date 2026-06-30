@@ -1,30 +1,31 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Button, Card, Form, Input, Select, Tag } from 'antd'
 import { useSavePartnerRegistrationDraftBusinessInfo } from '../../api/endpoints/partner-registration/partner-registration'
-import type { PartnerCategory } from '../../api/schemas/partnerCategory'
 import { categoryOptions } from './constants'
+import type { BusinessInfoFormValues } from './types'
 import {
   normalizeOptionalText,
   validateOptionalText,
   validateRequiredText,
 } from './validation'
 
-type BusinessInfoFormValues = {
-  businessName: string
-  description?: string
-  category?: PartnerCategory
-}
-
 type BusinessInfoBlockProps = {
   draftId?: string
   onDraftIdChange: (draftId: string) => void
+  initialValues?: BusinessInfoFormValues
+  initialIsDone?: boolean
 }
 
-export function BusinessInfoBlock({ draftId, onDraftIdChange }: BusinessInfoBlockProps) {
-  const [isDone, setIsDone] = useState(false)
+export function BusinessInfoBlock({
+  draftId,
+  onDraftIdChange,
+  initialValues,
+  initialIsDone = false,
+}: BusinessInfoBlockProps) {
+  const [isDone, setIsDone] = useState(initialIsDone)
 
-  const { control, handleSubmit } = useForm<BusinessInfoFormValues>({
+  const { control, handleSubmit, reset } = useForm<BusinessInfoFormValues>({
     defaultValues: {
       businessName: '',
       description: '',
@@ -34,11 +35,23 @@ export function BusinessInfoBlock({ draftId, onDraftIdChange }: BusinessInfoBloc
   const { mutate, isPending } = useSavePartnerRegistrationDraftBusinessInfo({
     mutation: {
       onSuccess: (response) => {
-        setIsDone(true)
-        onDraftIdChange(response.data.draftId)
+        if (response.status === 200) {
+          setIsDone(true)
+          onDraftIdChange(response.data.draftId)
+        }
       },
     },
   })
+
+  useEffect(() => {
+    if (initialValues) {
+      reset(initialValues)
+    }
+  }, [initialValues, reset])
+
+  useEffect(() => {
+    setIsDone(initialIsDone)
+  }, [initialIsDone])
 
   const resetDoneStatus = () => {
     if (isDone) {

@@ -5,7 +5,11 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from "./getPartnerRegistrationDraftResponse";
 export * from "./partnerCategory";
+export * from "./partnerRegistrationDraftBusinessInfo";
+export * from "./partnerRegistrationDraftContacts";
 export * from "./partnerRegistrationDraftResponse";
+export * from "./partnerRegistrationStep";
 export * from "./savePartnerRegistrationDraftBusinessInfoRequest";
 export * from "./savePartnerRegistrationDraftContactInfoRequest";

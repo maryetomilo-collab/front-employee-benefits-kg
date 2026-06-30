@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Button, Card, Col, Form, Input, Row, Tag } from 'antd'
 import { useSavePartnerRegistrationDraftContactInfo } from '../../api/endpoints/partner-registration/partner-registration'
+import type { ContactsFormValues } from './types'
 import {
   normalizeEmail,
   normalizeKgPhone,
@@ -10,21 +11,22 @@ import {
   validateRequiredText,
 } from './validation'
 
-type ContactsFormValues = {
-  contactName: string
-  contactPhone: string
-  contactEmail?: string
-}
-
 type ContactsBlockProps = {
   draftId?: string
   onDraftIdChange: (draftId: string) => void
+  initialValues?: ContactsFormValues
+  initialIsDone?: boolean
 }
 
-export function ContactsBlock({ draftId, onDraftIdChange }: ContactsBlockProps) {
-  const [isDone, setIsDone] = useState(false)
+export function ContactsBlock({
+  draftId,
+  onDraftIdChange,
+  initialValues,
+  initialIsDone = false,
+}: ContactsBlockProps) {
+  const [isDone, setIsDone] = useState(initialIsDone)
 
-  const { control, handleSubmit } = useForm<ContactsFormValues>({
+  const { control, handleSubmit, reset } = useForm<ContactsFormValues>({
     defaultValues: {
       contactName: '',
       contactPhone: '',
@@ -35,11 +37,23 @@ export function ContactsBlock({ draftId, onDraftIdChange }: ContactsBlockProps) 
   const { mutate, isPending } = useSavePartnerRegistrationDraftContactInfo({
     mutation: {
       onSuccess: (response) => {
-        setIsDone(true)
-        onDraftIdChange(response.data.draftId)
+        if (response.status === 200) {
+          setIsDone(true)
+          onDraftIdChange(response.data.draftId)
+        }
       },
     },
   })
+
+  useEffect(() => {
+    if (initialValues) {
+      reset(initialValues)
+    }
+  }, [initialValues, reset])
+
+  useEffect(() => {
+    setIsDone(initialIsDone)
+  }, [initialIsDone])
 
   const resetDoneStatus = () => {
     if (isDone) {

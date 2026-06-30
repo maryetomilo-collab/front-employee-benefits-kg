@@ -4,19 +4,46 @@
  * Employee Benefits API
  * OpenAPI spec version: 0.1.0
  */
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
   MutationFunction,
   QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
   UseMutationOptions,
   UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult,
 } from "@tanstack/react-query";
 
 import type {
+  GetPartnerRegistrationDraftResponse,
   PartnerRegistrationDraftResponse,
   SavePartnerRegistrationDraftBusinessInfoRequest,
   SavePartnerRegistrationDraftContactInfoRequest,
 } from "../../schemas";
+
+const withQueryKey = <T extends object, K>(
+  query: T,
+  queryKey: K,
+): T & { queryKey: K } => {
+  const result = { queryKey } as T & { queryKey: K };
+  for (const key of Object.keys(query)) {
+    // The explicit queryKey always wins, matching the previous
+    // `{ ...query, queryKey }` spread where it was set last.
+    if (key === "queryKey") continue;
+    Object.defineProperty(result, key, {
+      enumerable: true,
+      configurable: true,
+      get: () => (query as Record<string, unknown>)[key],
+    });
+  }
+  return result;
+};
 
 export type savePartnerRegistrationDraftBusinessInfoResponse200 = {
   data: PartnerRegistrationDraftResponse;
@@ -249,3 +276,198 @@ export const useSavePartnerRegistrationDraftContactInfo = <
     queryClient,
   );
 };
+export type getPartnerRegistrationDraftResponse200 = {
+  data: GetPartnerRegistrationDraftResponse;
+  status: 200;
+};
+
+export type getPartnerRegistrationDraftResponseSuccess =
+  getPartnerRegistrationDraftResponse200 & {
+    headers: Headers;
+  };
+export type getPartnerRegistrationDraftResponse =
+  getPartnerRegistrationDraftResponseSuccess;
+
+export const getGetPartnerRegistrationDraftUrl = (draftId: string) => {
+  return `/api/partner-registration/drafts/${draftId}`;
+};
+
+/**
+ * @summary Get partner registration draft
+ */
+export const getPartnerRegistrationDraft = async (
+  draftId: string,
+  options?: RequestInit,
+): Promise<getPartnerRegistrationDraftResponse> => {
+  const res = await fetch(getGetPartnerRegistrationDraftUrl(draftId), {
+    ...options,
+    method: "GET",
+  });
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+
+  const data: getPartnerRegistrationDraftResponse["data"] = body
+    ? JSON.parse(body)
+    : {};
+  return {
+    data,
+    status: res.status,
+    headers: res.headers,
+  } as getPartnerRegistrationDraftResponse;
+};
+
+export const getGetPartnerRegistrationDraftQueryKey = (draftId: string) => {
+  return [`/api/partner-registration/drafts/${draftId}`] as const;
+};
+
+export const getGetPartnerRegistrationDraftQueryOptions = <
+  TData = Awaited<ReturnType<typeof getPartnerRegistrationDraft>>,
+  TError = unknown,
+>(
+  draftId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getPartnerRegistrationDraft>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+) => {
+  const { query: queryOptions, fetch: fetchOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetPartnerRegistrationDraftQueryKey(draftId);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getPartnerRegistrationDraft>>
+  > = ({ signal }) =>
+    getPartnerRegistrationDraft(draftId, { signal, ...fetchOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: draftId !== null && draftId !== undefined,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getPartnerRegistrationDraft>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetPartnerRegistrationDraftQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getPartnerRegistrationDraft>>
+>;
+export type GetPartnerRegistrationDraftQueryError = unknown;
+
+export function useGetPartnerRegistrationDraft<
+  TData = Awaited<ReturnType<typeof getPartnerRegistrationDraft>>,
+  TError = unknown,
+>(
+  draftId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getPartnerRegistrationDraft>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPartnerRegistrationDraft>>,
+          TError,
+          Awaited<ReturnType<typeof getPartnerRegistrationDraft>>
+        >,
+        "initialData"
+      >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetPartnerRegistrationDraft<
+  TData = Awaited<ReturnType<typeof getPartnerRegistrationDraft>>,
+  TError = unknown,
+>(
+  draftId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getPartnerRegistrationDraft>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPartnerRegistrationDraft>>,
+          TError,
+          Awaited<ReturnType<typeof getPartnerRegistrationDraft>>
+        >,
+        "initialData"
+      >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetPartnerRegistrationDraft<
+  TData = Awaited<ReturnType<typeof getPartnerRegistrationDraft>>,
+  TError = unknown,
+>(
+  draftId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getPartnerRegistrationDraft>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get partner registration draft
+ */
+
+export function useGetPartnerRegistrationDraft<
+  TData = Awaited<ReturnType<typeof getPartnerRegistrationDraft>>,
+  TError = unknown,
+>(
+  draftId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getPartnerRegistrationDraft>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetPartnerRegistrationDraftQueryOptions(
+    draftId,
+    options,
+  );
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
