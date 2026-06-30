@@ -1,23 +1,42 @@
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Button, Card, Form, Input, Select, Tag } from 'antd'
-import { useCreatePartnerRegistrationDraftWithBusinessInfo } from '../../api/endpoints/partner-registration/partner-registration'
-import type { CreatePartnerRegistrationDraftBusinessInfoRequest } from '../../api/schemas/createPartnerRegistrationDraftBusinessInfoRequest'
+import { useSavePartnerRegistrationDraftBusinessInfo } from '../../api/endpoints/partner-registration/partner-registration'
+import type { PartnerCategory } from '../../api/schemas/partnerCategory'
 import { categoryOptions } from './constants'
+import {
+  normalizeOptionalText,
+  validateOptionalText,
+  validateRequiredText,
+} from './validation'
 
-export function BusinessInfoBlock() {
+type BusinessInfoFormValues = {
+  businessName: string
+  description?: string
+  category?: PartnerCategory
+}
+
+type BusinessInfoBlockProps = {
+  draftId?: string
+  onDraftIdChange: (draftId: string) => void
+}
+
+export function BusinessInfoBlock({ draftId, onDraftIdChange }: BusinessInfoBlockProps) {
   const [isDone, setIsDone] = useState(false)
 
-  const { control, handleSubmit } = useForm<CreatePartnerRegistrationDraftBusinessInfoRequest>({
+  const { control, handleSubmit } = useForm<BusinessInfoFormValues>({
     defaultValues: {
       businessName: '',
       description: '',
     },
   })
 
-  const { mutate, isPending } = useCreatePartnerRegistrationDraftWithBusinessInfo({
+  const { mutate, isPending } = useSavePartnerRegistrationDraftBusinessInfo({
     mutation: {
-      onSuccess: () => setIsDone(true),
+      onSuccess: (response) => {
+        setIsDone(true)
+        onDraftIdChange(response.data.draftId)
+      },
     },
   })
 
@@ -27,8 +46,19 @@ export function BusinessInfoBlock() {
     }
   }
 
-  const onSubmit = (values: CreatePartnerRegistrationDraftBusinessInfoRequest) => {
-    mutate({ data: values })
+  const onSubmit = (values: BusinessInfoFormValues) => {
+    if (!values.category) {
+      return
+    }
+
+    mutate({
+      data: {
+        draftId: draftId ?? null,
+        businessName: values.businessName.trim(),
+        description: normalizeOptionalText(values.description),
+        category: values.category,
+      },
+    })
   }
 
   return (
@@ -44,7 +74,14 @@ export function BusinessInfoBlock() {
         <Controller
           name="businessName"
           control={control}
-          rules={{ required: 'Укажите название бизнеса' }}
+          rules={{
+            validate: (value) =>
+              validateRequiredText(value, {
+                minLength: 2,
+                maxLength: 100,
+                fieldLabel: 'Название бизнеса',
+              }),
+          }}
           render={({ field, fieldState }) => (
             <Form.Item
               label="Название бизнеса"
@@ -53,6 +90,7 @@ export function BusinessInfoBlock() {
             >
               <Input
                 {...field}
+                placeholder="Введите название бизнеса"
                 onChange={(event) => {
                   resetDoneStatus()
                   field.onChange(event)
@@ -65,12 +103,20 @@ export function BusinessInfoBlock() {
         <Controller
           name="description"
           control={control}
-          render={({ field }) => (
-            <Form.Item label="Описание">
+          rules={{
+            validate: (value) => validateOptionalText(value, 1000),
+          }}
+          render={({ field, fieldState }) => (
+            <Form.Item
+              label="Описание"
+              validateStatus={fieldState.error ? 'error' : undefined}
+              help={fieldState.error?.message}
+            >
               <Input.TextArea
                 {...field}
                 rows={3}
                 value={field.value ?? ''}
+                placeholder="Кратко опишите ваш бизнес"
                 onChange={(event) => {
                   resetDoneStatus()
                   field.onChange(event)

@@ -13,130 +13,239 @@ import type {
 } from "@tanstack/react-query";
 
 import type {
-  CreatePartnerRegistrationDraftBusinessInfoRequest,
-  PartnerRegistrationDraftStepResponse,
+  PartnerRegistrationDraftResponse,
+  SavePartnerRegistrationDraftBusinessInfoRequest,
+  SavePartnerRegistrationDraftContactInfoRequest,
 } from "../../schemas";
 
-export type createPartnerRegistrationDraftWithBusinessInfoResponse201 = {
-  data: PartnerRegistrationDraftStepResponse;
-  status: 201;
+export type savePartnerRegistrationDraftBusinessInfoResponse200 = {
+  data: PartnerRegistrationDraftResponse;
+  status: 200;
 };
 
-export type createPartnerRegistrationDraftWithBusinessInfoResponseSuccess =
-  createPartnerRegistrationDraftWithBusinessInfoResponse201 & {
+export type savePartnerRegistrationDraftBusinessInfoResponseSuccess =
+  savePartnerRegistrationDraftBusinessInfoResponse200 & {
     headers: Headers;
   };
-export type createPartnerRegistrationDraftWithBusinessInfoResponse =
-  createPartnerRegistrationDraftWithBusinessInfoResponseSuccess;
+export type savePartnerRegistrationDraftBusinessInfoResponse =
+  savePartnerRegistrationDraftBusinessInfoResponseSuccess;
 
-export const getCreatePartnerRegistrationDraftWithBusinessInfoUrl = () => {
-  return `/api/partner-registration-drafts/business-info`;
+export const getSavePartnerRegistrationDraftBusinessInfoUrl = () => {
+  return `/api/partner-registration/draft/business-info`;
 };
 
 /**
- * @summary Create partner registration draft with business info
+ * @summary Save partner registration draft business info
  */
-export const createPartnerRegistrationDraftWithBusinessInfo = async (
-  createPartnerRegistrationDraftBusinessInfoRequest: CreatePartnerRegistrationDraftBusinessInfoRequest,
+export const savePartnerRegistrationDraftBusinessInfo = async (
+  savePartnerRegistrationDraftBusinessInfoRequest: SavePartnerRegistrationDraftBusinessInfoRequest,
   options?: RequestInit,
-): Promise<createPartnerRegistrationDraftWithBusinessInfoResponse> => {
-  const res = await fetch(
-    getCreatePartnerRegistrationDraftWithBusinessInfoUrl(),
-    {
-      ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(createPartnerRegistrationDraftBusinessInfoRequest),
-    },
-  );
+): Promise<savePartnerRegistrationDraftBusinessInfoResponse> => {
+  const res = await fetch(getSavePartnerRegistrationDraftBusinessInfoUrl(), {
+    ...options,
+    method: "PUT",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(savePartnerRegistrationDraftBusinessInfoRequest),
+  });
 
   const body = [204, 205, 304].includes(res.status) ? null : await res.text();
 
-  const data: createPartnerRegistrationDraftWithBusinessInfoResponse["data"] =
-    body ? JSON.parse(body) : {};
+  const data: savePartnerRegistrationDraftBusinessInfoResponse["data"] = body
+    ? JSON.parse(body)
+    : {};
   return {
     data,
     status: res.status,
     headers: res.headers,
-  } as createPartnerRegistrationDraftWithBusinessInfoResponse;
+  } as savePartnerRegistrationDraftBusinessInfoResponse;
 };
 
-export const getCreatePartnerRegistrationDraftWithBusinessInfoMutationOptions =
-  <TError = unknown, TContext = unknown>(options?: {
-    mutation?: UseMutationOptions<
-      Awaited<
-        ReturnType<typeof createPartnerRegistrationDraftWithBusinessInfo>
-      >,
-      TError,
-      { data: CreatePartnerRegistrationDraftBusinessInfoRequest },
-      TContext
-    >;
-    fetch?: RequestInit;
-  }): UseMutationOptions<
-    Awaited<ReturnType<typeof createPartnerRegistrationDraftWithBusinessInfo>>,
+export const getSavePartnerRegistrationDraftBusinessInfoMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof savePartnerRegistrationDraftBusinessInfo>>,
     TError,
-    { data: CreatePartnerRegistrationDraftBusinessInfoRequest },
+    { data: SavePartnerRegistrationDraftBusinessInfoRequest },
     TContext
-  > => {
-    const mutationKey = ["createPartnerRegistrationDraftWithBusinessInfo"];
-    const { mutation: mutationOptions, fetch: fetchOptions } = options
-      ? options.mutation &&
-        "mutationKey" in options.mutation &&
-        options.mutation.mutationKey
-        ? options
-        : { ...options, mutation: { ...options.mutation, mutationKey } }
-      : { mutation: { mutationKey }, fetch: undefined };
+  >;
+  fetch?: RequestInit;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof savePartnerRegistrationDraftBusinessInfo>>,
+  TError,
+  { data: SavePartnerRegistrationDraftBusinessInfoRequest },
+  TContext
+> => {
+  const mutationKey = ["savePartnerRegistrationDraftBusinessInfo"];
+  const { mutation: mutationOptions, fetch: fetchOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, fetch: undefined };
 
-    const mutationFn: MutationFunction<
-      Awaited<
-        ReturnType<typeof createPartnerRegistrationDraftWithBusinessInfo>
-      >,
-      { data: CreatePartnerRegistrationDraftBusinessInfoRequest }
-    > = (props) => {
-      const { data } = props ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof savePartnerRegistrationDraftBusinessInfo>>,
+    { data: SavePartnerRegistrationDraftBusinessInfoRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-      return createPartnerRegistrationDraftWithBusinessInfo(data, fetchOptions);
-    };
-
-    return { mutationFn, ...mutationOptions };
+    return savePartnerRegistrationDraftBusinessInfo(data, fetchOptions);
   };
 
-export type CreatePartnerRegistrationDraftWithBusinessInfoMutationResult =
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SavePartnerRegistrationDraftBusinessInfoMutationResult =
   NonNullable<
-    Awaited<ReturnType<typeof createPartnerRegistrationDraftWithBusinessInfo>>
+    Awaited<ReturnType<typeof savePartnerRegistrationDraftBusinessInfo>>
   >;
-export type CreatePartnerRegistrationDraftWithBusinessInfoMutationBody =
-  CreatePartnerRegistrationDraftBusinessInfoRequest;
-export type CreatePartnerRegistrationDraftWithBusinessInfoMutationError =
-  unknown;
+export type SavePartnerRegistrationDraftBusinessInfoMutationBody =
+  SavePartnerRegistrationDraftBusinessInfoRequest;
+export type SavePartnerRegistrationDraftBusinessInfoMutationError = unknown;
 
 /**
- * @summary Create partner registration draft with business info
+ * @summary Save partner registration draft business info
  */
-export const useCreatePartnerRegistrationDraftWithBusinessInfo = <
+export const useSavePartnerRegistrationDraftBusinessInfo = <
   TError = unknown,
   TContext = unknown,
 >(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<
-        ReturnType<typeof createPartnerRegistrationDraftWithBusinessInfo>
-      >,
+      Awaited<ReturnType<typeof savePartnerRegistrationDraftBusinessInfo>>,
       TError,
-      { data: CreatePartnerRegistrationDraftBusinessInfoRequest },
+      { data: SavePartnerRegistrationDraftBusinessInfoRequest },
       TContext
     >;
     fetch?: RequestInit;
   },
   queryClient?: QueryClient,
 ): UseMutationResult<
-  Awaited<ReturnType<typeof createPartnerRegistrationDraftWithBusinessInfo>>,
+  Awaited<ReturnType<typeof savePartnerRegistrationDraftBusinessInfo>>,
   TError,
-  { data: CreatePartnerRegistrationDraftBusinessInfoRequest },
+  { data: SavePartnerRegistrationDraftBusinessInfoRequest },
   TContext
 > => {
   return useMutation(
-    getCreatePartnerRegistrationDraftWithBusinessInfoMutationOptions(options),
+    getSavePartnerRegistrationDraftBusinessInfoMutationOptions(options),
+    queryClient,
+  );
+};
+export type savePartnerRegistrationDraftContactInfoResponse200 = {
+  data: PartnerRegistrationDraftResponse;
+  status: 200;
+};
+
+export type savePartnerRegistrationDraftContactInfoResponseSuccess =
+  savePartnerRegistrationDraftContactInfoResponse200 & {
+    headers: Headers;
+  };
+export type savePartnerRegistrationDraftContactInfoResponse =
+  savePartnerRegistrationDraftContactInfoResponseSuccess;
+
+export const getSavePartnerRegistrationDraftContactInfoUrl = () => {
+  return `/api/partner-registration/draft/contact-info`;
+};
+
+/**
+ * @summary Save partner registration draft contact info
+ */
+export const savePartnerRegistrationDraftContactInfo = async (
+  savePartnerRegistrationDraftContactInfoRequest: SavePartnerRegistrationDraftContactInfoRequest,
+  options?: RequestInit,
+): Promise<savePartnerRegistrationDraftContactInfoResponse> => {
+  const res = await fetch(getSavePartnerRegistrationDraftContactInfoUrl(), {
+    ...options,
+    method: "PUT",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(savePartnerRegistrationDraftContactInfoRequest),
+  });
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+
+  const data: savePartnerRegistrationDraftContactInfoResponse["data"] = body
+    ? JSON.parse(body)
+    : {};
+  return {
+    data,
+    status: res.status,
+    headers: res.headers,
+  } as savePartnerRegistrationDraftContactInfoResponse;
+};
+
+export const getSavePartnerRegistrationDraftContactInfoMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof savePartnerRegistrationDraftContactInfo>>,
+    TError,
+    { data: SavePartnerRegistrationDraftContactInfoRequest },
+    TContext
+  >;
+  fetch?: RequestInit;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof savePartnerRegistrationDraftContactInfo>>,
+  TError,
+  { data: SavePartnerRegistrationDraftContactInfoRequest },
+  TContext
+> => {
+  const mutationKey = ["savePartnerRegistrationDraftContactInfo"];
+  const { mutation: mutationOptions, fetch: fetchOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, fetch: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof savePartnerRegistrationDraftContactInfo>>,
+    { data: SavePartnerRegistrationDraftContactInfoRequest }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return savePartnerRegistrationDraftContactInfo(data, fetchOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SavePartnerRegistrationDraftContactInfoMutationResult = NonNullable<
+  Awaited<ReturnType<typeof savePartnerRegistrationDraftContactInfo>>
+>;
+export type SavePartnerRegistrationDraftContactInfoMutationBody =
+  SavePartnerRegistrationDraftContactInfoRequest;
+export type SavePartnerRegistrationDraftContactInfoMutationError = unknown;
+
+/**
+ * @summary Save partner registration draft contact info
+ */
+export const useSavePartnerRegistrationDraftContactInfo = <
+  TError = unknown,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof savePartnerRegistrationDraftContactInfo>>,
+      TError,
+      { data: SavePartnerRegistrationDraftContactInfoRequest },
+      TContext
+    >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof savePartnerRegistrationDraftContactInfo>>,
+  TError,
+  { data: SavePartnerRegistrationDraftContactInfoRequest },
+  TContext
+> => {
+  return useMutation(
+    getSavePartnerRegistrationDraftContactInfoMutationOptions(options),
     queryClient,
   );
 };

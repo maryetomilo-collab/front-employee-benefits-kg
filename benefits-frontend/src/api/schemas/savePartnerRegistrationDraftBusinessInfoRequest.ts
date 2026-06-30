@@ -6,21 +6,18 @@
  */
 import type { PartnerCategory } from "./partnerCategory";
 
-export interface CreatePartnerRegistrationDraftBusinessInfoRequest {
+export interface SavePartnerRegistrationDraftBusinessInfoRequest {
+  /** @nullable */
+  draftId?: string | null;
   /**
    * @minLength 2
-   * @maxLength 255
+   * @maxLength 100
    */
   businessName: string;
-  /**
-   * @maxLength 2000
-   * @nullable
-   */
-  description?: string | null;
-  category: PartnerCategory;
   /**
    * @maxLength 1000
    * @nullable
    */
-  logoUrl?: string | null;
+  description?: string | null;
+  category: PartnerCategory;
 }

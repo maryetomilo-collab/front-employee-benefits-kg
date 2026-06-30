@@ -12,81 +12,113 @@ tags:
     description: Регистрация партнёра и управление черновиком регистрации
 
 paths:
-  /api/partner-registration-drafts/business-info:
-    post:
+  /api/partner-registration/draft/business-info:
+    put:
       tags:
         - Partner Registration
-      summary: Create partner registration draft with business info
-      operationId: createPartnerRegistrationDraftWithBusinessInfo
+      summary: Save partner registration draft business info
+      operationId: savePartnerRegistrationDraftBusinessInfo
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreatePartnerRegistrationDraftBusinessInfoRequest'
+              $ref: '#/components/schemas/SavePartnerRegistrationDraftBusinessInfoRequest'
       responses:
-        '201':
-          description: Partner registration draft created
+        '200':
+          description: Partner registration draft business info saved
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PartnerRegistrationDraftStepResponse'
+                $ref: '#/components/schemas/PartnerRegistrationDraftResponse'
+
+  /api/partner-registration/draft/contact-info:
+    put:
+      tags:
+        - Partner Registration
+      summary: Save partner registration draft contact info
+      operationId: savePartnerRegistrationDraftContactInfo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SavePartnerRegistrationDraftContactInfoRequest'
+      responses:
+        '200':
+          description: Partner registration draft contact info saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerRegistrationDraftResponse'
 
 components:
   schemas:
-    CreatePartnerRegistrationDraftBusinessInfoRequest:
+    SavePartnerRegistrationDraftBusinessInfoRequest:
       type: object
       required:
         - businessName
         - category
       properties:
+        draftId:
+          type: string
+          format: uuid
+          nullable: true
+          example: b7b7c3c1-2b15-4f7c-8c3d-1b4f02e8a111
+
         businessName:
           type: string
           minLength: 2
-          maxLength: 255
+          maxLength: 100
           example: Sierra Coffee
 
         description:
           type: string
-          maxLength: 2000
+          maxLength: 1000
           nullable: true
-          example: Кофейня в центре Бишкека
+          example: Кофейня с завтраками, десертами и напитками
 
         category:
           $ref: '#/components/schemas/PartnerCategory'
 
-        logoUrl:
-          type: string
-          format: uri
-          maxLength: 1000
-          nullable: true
-          example: https://cdn.example.com/logos/sierra.png
-
-    PartnerRegistrationDraftStepResponse:
+    SavePartnerRegistrationDraftContactInfoRequest:
       type: object
       required:
-        - draftId
-        - status
-        - currentStep
-        - completedSteps
+        - contactName
+        - contactPhone
       properties:
         draftId:
           type: string
           format: uuid
-          example: 0f2b5d4e-1d1a-4e3e-9c2b-6a7f9d123abc
+          nullable: true
+          example: b7b7c3c1-2b15-4f7c-8c3d-1b4f02e8a111
 
-        status:
-          $ref: '#/components/schemas/PartnerRegistrationDraftStatus'
+        contactName:
+          type: string
+          minLength: 2
+          maxLength: 100
+          example: Азамат
 
-        currentStep:
-          $ref: '#/components/schemas/PartnerRegistrationStep'
+        contactPhone:
+          type: string
+          example: "+996700123456"
 
-        completedSteps:
-          type: array
-          items:
-            $ref: '#/components/schemas/PartnerRegistrationStep'
-          example:
-            - BUSINESS_INFO
+        contactEmail:
+          type: string
+          format: email
+          maxLength: 255
+          nullable: true
+          example: azamat@mail.com
+
+    PartnerRegistrationDraftResponse:
+      type: object
+      required:
+        - draftId
+      properties:
+        draftId:
+          type: string
+          format: uuid
+          example: b7b7c3c1-2b15-4f7c-8c3d-1b4f02e8a111
 
     PartnerCategory:
       type: string
@@ -99,19 +131,3 @@ components:
         - HEALTH
         - ENTERTAINMENT
         - OTHER
-
-    PartnerRegistrationDraftStatus:
-      type: string
-      enum:
-        - DRAFT
-        - SUBMITTED
-        - CANCELLED
-        - EXPIRED
-
-    PartnerRegistrationStep:
-      type: string
-      enum:
-        - BUSINESS_INFO
-        - CONTACTS
-        - LOCATIONS
-        - REVIEW
