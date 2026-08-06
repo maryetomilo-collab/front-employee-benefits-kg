@@ -13,3 +13,4 @@ export * from "./partnerRegistrationDraftResponse";
 export * from "./partnerRegistrationStep";
 export * from "./savePartnerRegistrationDraftBusinessInfoRequest";
 export * from "./savePartnerRegistrationDraftContactInfoRequest";
+export * from "./submitPartnerRegistrationDraftResponse";

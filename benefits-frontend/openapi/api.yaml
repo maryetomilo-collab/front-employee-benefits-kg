@@ -72,6 +72,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetPartnerRegistrationDraftResponse'
+  /api/partner-registration/drafts/{draftId}/submit:
+    post:
+      tags:
+        - Partner Registration Drafts
+      summary: Завершить регистрацию партнёра
+      description: >
+        Завершает черновик регистрации партнёра.
+        После успешного завершения статус черновика меняется с DRAFT на SUBMITTED.
+        Для MVP система создаёт партнёра в статусе PENDING.
+      operationId: submitPartnerRegistrationDraft
+      parameters:
+        - name: draftId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID черновика регистрации партнёра
+      responses:
+        '200':
+          description: Регистрация партнёра завершена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitPartnerRegistrationDraftResponse'
+              example:
+                draftId: "b7b7c3c1-2b15-4f7c-8c3d-1b4f02e8a111"
+                status: SUBMITTED
+                partnerId: "3d0a4c2a-9d5c-4e4d-97cc-2c96a5f6b123"  
 
 components:
   schemas:
@@ -220,3 +249,24 @@ components:
       enum:
         - BUSINESS_INFO
         - CONTACTS
+        
+    SubmitPartnerRegistrationDraftResponse:
+      type: object
+      required:
+        - draftId
+        - status
+        - partnerId
+      properties:
+        draftId:
+          type: string
+          format: uuid
+          example: b7b7c3c1-2b15-4f7c-8c3d-1b4f02e8a111
+
+        status:
+          type: string
+          example: SUBMITTED
+
+        partnerId:
+          type: string
+          format: uuid
+          example: 3d0a4c2a-9d5c-4e4d-97cc-2c96a5f6b123

@@ -6,19 +6,26 @@ import type { BusinessInfoFormValues, ContactsFormValues } from './types'
 
 type RegistrationDraftState = {
   draftId?: string
-  isCompleted: boolean
+  isAlreadySubmitted: boolean
+  isSubmitted: boolean
   draftLoaded: boolean
   initialBusinessInfo?: BusinessInfoFormValues
   initialContacts?: ContactsFormValues
   businessInfoSaved: boolean
   contactsSaved: boolean
+  allBlocksSaved: boolean
   handleDraftIdChange: (draftId: string) => void
+  setBusinessInfoSaved: (saved: boolean) => void
+  setContactsSaved: (saved: boolean) => void
+  markAsSubmitted: () => void
+  markAsAlreadySubmitted: () => void
 }
 
 export function useRegistrationDraft(): RegistrationDraftState {
   const [storedDraftId] = useState(() => getStoredDraftId())
   const [draftId, setDraftId] = useState<string>()
-  const [isCompleted, setIsCompleted] = useState(false)
+  const [isAlreadySubmitted, setIsAlreadySubmitted] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
   const [initialBusinessInfo, setInitialBusinessInfo] = useState<BusinessInfoFormValues>()
   const [initialContacts, setInitialContacts] = useState<ContactsFormValues>()
   const [businessInfoSaved, setBusinessInfoSaved] = useState(false)
@@ -50,7 +57,7 @@ export function useRegistrationDraft(): RegistrationDraftState {
     const draft = draftQuery.data.data
 
     if (draft.status !== 'DRAFT') {
-      setIsCompleted(true)
+      setIsAlreadySubmitted(true)
       setDraftLoaded(true)
       return
     }
@@ -86,14 +93,30 @@ export function useRegistrationDraft(): RegistrationDraftState {
     setStoredDraftId(id)
   }, [])
 
+  const markAsSubmitted = useCallback(() => {
+    setIsSubmitted(true)
+    removeStoredDraftId()
+  }, [])
+
+  const markAsAlreadySubmitted = useCallback(() => {
+    setIsAlreadySubmitted(true)
+    removeStoredDraftId()
+  }, [])
+
   return {
     draftId,
-    isCompleted,
+    isAlreadySubmitted,
+    isSubmitted,
     draftLoaded,
     initialBusinessInfo,
     initialContacts,
     businessInfoSaved,
     contactsSaved,
+    allBlocksSaved: businessInfoSaved && contactsSaved,
     handleDraftIdChange,
+    setBusinessInfoSaved,
+    setContactsSaved,
+    markAsSubmitted,
+    markAsAlreadySubmitted,
   }
 }

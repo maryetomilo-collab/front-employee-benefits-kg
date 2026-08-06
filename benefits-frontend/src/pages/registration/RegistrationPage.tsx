@@ -1,18 +1,25 @@
 import { Alert, Spin } from 'antd'
 import { BusinessInfoBlock } from './BusinessInfoBlock'
 import { ContactsBlock } from './ContactsBlock'
+import { SubmitRegistrationBlock } from './SubmitRegistrationBlock'
 import { useRegistrationDraft } from './useRegistrationDraft'
 
 export default function RegistrationPage() {
   const {
     draftId,
-    isCompleted,
+    isAlreadySubmitted,
+    isSubmitted,
     draftLoaded,
     initialBusinessInfo,
     initialContacts,
     businessInfoSaved,
     contactsSaved,
+    allBlocksSaved,
     handleDraftIdChange,
+    setBusinessInfoSaved,
+    setContactsSaved,
+    markAsSubmitted,
+    markAsAlreadySubmitted,
   } = useRegistrationDraft()
 
   if (!draftLoaded) {
@@ -23,10 +30,18 @@ export default function RegistrationPage() {
     )
   }
 
-  if (isCompleted) {
+  if (isSubmitted) {
     return (
       <div style={{ padding: 24, textAlign: 'left' }}>
-        <Alert type="info" showIcon message="Ваша регистрация уже завершена" />
+        <Alert type="success" showIcon message="Заявка на регистрацию отправлена" />
+      </div>
+    )
+  }
+
+  if (isAlreadySubmitted) {
+    return (
+      <div style={{ padding: 24, textAlign: 'left' }}>
+        <Alert type="info" showIcon message="Заявка на регистрацию уже была отправлена" />
       </div>
     )
   }
@@ -38,6 +53,7 @@ export default function RegistrationPage() {
         onDraftIdChange={handleDraftIdChange}
         initialValues={initialBusinessInfo}
         initialIsDone={businessInfoSaved}
+        onSavedChange={setBusinessInfoSaved}
       />
 
       <ContactsBlock
@@ -45,6 +61,14 @@ export default function RegistrationPage() {
         onDraftIdChange={handleDraftIdChange}
         initialValues={initialContacts}
         initialIsDone={contactsSaved}
+        onSavedChange={setContactsSaved}
+      />
+
+      <SubmitRegistrationBlock
+        draftId={draftId}
+        allBlocksSaved={allBlocksSaved}
+        onSubmitted={markAsSubmitted}
+        onAlreadySubmitted={markAsAlreadySubmitted}
       />
     </div>
   )

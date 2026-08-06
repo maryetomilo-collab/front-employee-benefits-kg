@@ -15,6 +15,7 @@ type BusinessInfoBlockProps = {
   onDraftIdChange: (draftId: string) => void
   initialValues?: BusinessInfoFormValues
   initialIsDone?: boolean
+  onSavedChange?: (saved: boolean) => void
 }
 
 export function BusinessInfoBlock({
@@ -22,6 +23,7 @@ export function BusinessInfoBlock({
   onDraftIdChange,
   initialValues,
   initialIsDone = false,
+  onSavedChange,
 }: BusinessInfoBlockProps) {
   const [isDone, setIsDone] = useState(initialIsDone)
 
@@ -37,6 +39,7 @@ export function BusinessInfoBlock({
       onSuccess: (response) => {
         if (response.status === 200) {
           setIsDone(true)
+          onSavedChange?.(true)
           onDraftIdChange(response.data.draftId)
         }
       },
@@ -56,6 +59,7 @@ export function BusinessInfoBlock({
   const resetDoneStatus = () => {
     if (isDone) {
       setIsDone(false)
+      onSavedChange?.(false)
     }
   }
 
