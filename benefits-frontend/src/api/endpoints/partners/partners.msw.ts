@@ -4,35 +4,38 @@
  * Employee Benefits API
  * OpenAPI spec version: 0.1.0
  */
-import { faker } from "@faker-js/faker";
-
 import { HttpResponse, http } from "msw";
 import type { RequestHandlerOptions } from "msw";
 
 import type { PartnerResponse } from "../../schemas";
 
-export const getGetPartnerResponseMock = (
-  overrideResponse: Partial<Extract<PartnerResponse, object>> = {},
-): PartnerResponse => ({
-  id: faker.string.uuid(),
-  name: faker.string.alpha({ length: { min: 10, max: 20 } }),
-  branches: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
-    (_, i) => i + 1,
-  ).map(() => ({
-    id: faker.string.uuid(),
-    name: faker.string.alpha({ length: { min: 10, max: 20 } }),
-    address: faker.string.alpha({ length: { min: 10, max: 20 } }),
-  })),
-  offers: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
-    (_, i) => i + 1,
-  ).map(() => ({
-    id: faker.string.uuid(),
-    name: faker.string.alpha({ length: { min: 10, max: 20 } }),
-    activationDate: faker.date.past().toISOString().slice(0, 10),
-  })),
-  ...overrideResponse,
+export const getGetPartnerResponseMock = (): PartnerResponse => ({
+  id: "3d0a4c2a-9d5c-4e4d-97cc-2c96a5f6b123",
+  name: "Макаронная",
+  branches: [
+    {
+      id: "7f4b6b3e-2d62-4d8e-b0d5-35f8c7c91a11",
+      name: "Советская",
+      address: "Советская, 345",
+    },
+    {
+      id: "2d9c9134-f86d-46c4-b35c-a467638ab211",
+      name: "Токтогула",
+      address: "Токтогула, 125",
+    },
+  ],
+  offers: [
+    {
+      id: "1b4f02e8-a111-4c2a-9d5c-4e4d97cc2c96",
+      name: "Скидка 10%",
+      activationDate: "2026-08-06",
+    },
+    {
+      id: "6a84f2b1-3907-47e4-9022-49d319114e88",
+      name: "Бесплатный напиток к заказу",
+      activationDate: "2026-08-10",
+    },
+  ],
 });
 
 export const getGetPartnerMockHandler = (

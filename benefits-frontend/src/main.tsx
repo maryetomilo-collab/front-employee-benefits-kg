@@ -22,12 +22,24 @@ const router = createBrowserRouter([
   },
 ])
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ConfigProvider locale={ruRU}>
-        <RouterProvider router={router} />
-      </ConfigProvider>
-    </QueryClientProvider>
-  </StrictMode>,
-)
+async function startApp() {
+  if (import.meta.env.DEV) {
+    const { worker } = await import('./api/mocks/browser')
+
+    await worker.start({
+      onUnhandledRequest: 'error',
+    })
+  }
+
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <ConfigProvider locale={ruRU}>
+          <RouterProvider router={router} />
+        </ConfigProvider>
+      </QueryClientProvider>
+    </StrictMode>,
+  )
+}
+
+void startApp()

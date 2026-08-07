@@ -4,84 +4,40 @@
  * Employee Benefits API
  * OpenAPI spec version: 0.1.0
  */
-import { faker } from "@faker-js/faker";
-
 import { HttpResponse, http } from "msw";
 import type { RequestHandlerOptions } from "msw";
 
-import { PartnerCategory, PartnerRegistrationStep } from "../../schemas";
 import type {
   GetPartnerRegistrationDraftResponse,
   PartnerRegistrationDraftResponse,
 } from "../../schemas";
 
-export const getSavePartnerRegistrationDraftBusinessInfoResponseMock = (
-  overrideResponse: Partial<
-    Extract<PartnerRegistrationDraftResponse, object>
-  > = {},
-): PartnerRegistrationDraftResponse => ({
-  draftId: faker.string.uuid(),
-  ...overrideResponse,
-});
+export const getSavePartnerRegistrationDraftBusinessInfoResponseMock =
+  (): PartnerRegistrationDraftResponse => ({
+    draftId: "b7b7c3c1-2b15-4f7c-8c3d-1b4f02e8a111",
+  });
 
-export const getSavePartnerRegistrationDraftContactInfoResponseMock = (
-  overrideResponse: Partial<
-    Extract<PartnerRegistrationDraftResponse, object>
-  > = {},
-): PartnerRegistrationDraftResponse => ({
-  draftId: faker.string.uuid(),
-  ...overrideResponse,
-});
+export const getSavePartnerRegistrationDraftContactInfoResponseMock =
+  (): PartnerRegistrationDraftResponse => ({
+    draftId: "b7b7c3c1-2b15-4f7c-8c3d-1b4f02e8a111",
+  });
 
-export const getGetPartnerRegistrationDraftResponseMock = (
-  overrideResponse: Partial<
-    Extract<GetPartnerRegistrationDraftResponse, object>
-  > = {},
-): GetPartnerRegistrationDraftResponse => ({
-  draftId: faker.string.uuid(),
-  status: faker.string.alpha({ length: { min: 10, max: 20 } }),
-  completedSteps: faker.helpers.arrayElements(
-    Object.values(PartnerRegistrationStep),
-  ),
-  businessInfo: faker.helpers.arrayElement([
-    {
-      businessName: faker.helpers.arrayElement([
-        faker.string.alpha({ length: { min: 10, max: 20 } }),
-        undefined,
-      ]),
-      description: faker.helpers.arrayElement([
-        faker.helpers.arrayElement([
-          faker.string.alpha({ length: { min: 10, max: 20 } }),
-          null,
-        ]),
-        undefined,
-      ]),
-      category: faker.helpers.arrayElement([
-        faker.helpers.arrayElement(Object.values(PartnerCategory)),
-        undefined,
-      ]),
+export const getGetPartnerRegistrationDraftResponseMock =
+  (): GetPartnerRegistrationDraftResponse => ({
+    draftId: "7f4b6b3e-2d62-4d8e-b0d5-35f8c7c91a11",
+    status: "DRAFT",
+    completedSteps: ["BUSINESS_INFO", "CONTACTS"],
+    businessInfo: {
+      businessName: "Sierra Coffee",
+      description: "Кофейня в центре Бишкека",
+      category: "COFFEE_SHOP",
     },
-    undefined,
-  ]),
-  contacts: faker.helpers.arrayElement([
-    {
-      contactName: faker.helpers.arrayElement([
-        faker.string.alpha({ length: { min: 10, max: 20 } }),
-        undefined,
-      ]),
-      contactPhone: faker.helpers.arrayElement([
-        faker.string.alpha({ length: { min: 10, max: 20 } }),
-        undefined,
-      ]),
-      contactEmail: faker.helpers.arrayElement([
-        faker.helpers.arrayElement([faker.internet.email(), null]),
-        undefined,
-      ]),
+    contacts: {
+      contactName: "Азамат",
+      contactPhone: "+996700123456",
+      contactEmail: "partner@example.kg",
     },
-    undefined,
-  ]),
-  ...overrideResponse,
-});
+  });
 
 export const getSavePartnerRegistrationDraftBusinessInfoMockHandler = (
   overrideResponse?:

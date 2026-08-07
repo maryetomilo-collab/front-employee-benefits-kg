@@ -35,6 +35,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PartnerResponse'
+              example:
+                id: "3d0a4c2a-9d5c-4e4d-97cc-2c96a5f6b123"
+                name: Макаронная
+                branches:
+                  - id: "7f4b6b3e-2d62-4d8e-b0d5-35f8c7c91a11"
+                    name: Советская
+                    address: Советская, 345
+                  - id: "2d9c9134-f86d-46c4-b35c-a467638ab211"
+                    name: Токтогула
+                    address: Токтогула, 125
+                offers:
+                  - id: "1b4f02e8-a111-4c2a-9d5c-4e4d97cc2c96"
+                    name: Скидка 10%
+                    activationDate: "2026-08-06"
+                  - id: "6a84f2b1-3907-47e4-9022-49d319114e88"
+                    name: Бесплатный напиток к заказу
+                    activationDate: "2026-08-10"
         '404':
           description: Партнёр не найден
 
@@ -57,6 +74,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PartnerRegistrationDraftResponse'
+              example:
+                draftId: "b7b7c3c1-2b15-4f7c-8c3d-1b4f02e8a111"
 
   /api/partner-registration/draft/contact-info:
     put:
@@ -77,6 +96,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PartnerRegistrationDraftResponse'
+              example:
+                draftId: "b7b7c3c1-2b15-4f7c-8c3d-1b4f02e8a111"
 
   /api/partner-registration/drafts/{draftId}:
     get:
@@ -98,6 +119,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetPartnerRegistrationDraftResponse'
+              example:
+                draftId: "7f4b6b3e-2d62-4d8e-b0d5-35f8c7c91a11"
+                status: DRAFT
+                completedSteps:
+                  - BUSINESS_INFO
+                  - CONTACTS
+                businessInfo:
+                  businessName: Sierra Coffee
+                  description: Кофейня в центре Бишкека
+                  category: COFFEE_SHOP
+                contacts:
+                  contactName: Азамат
+                  contactPhone: "+996700123456"
+                  contactEmail: partner@example.kg
   /api/partner-registration/drafts/{draftId}/submit:
     post:
       tags:
