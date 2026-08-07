@@ -6,6 +6,7 @@ import { createRoot } from 'react-dom/client'
 import { createBrowserRouter } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
 import './index.css'
+import PartnerLayout from './app/router/PartnerLayout'
 import PartnerPage from './pages/partner/PartnerPage'
 import RegistrationPage from './pages/registration/RegistrationPage'
 
@@ -17,8 +18,13 @@ const router = createBrowserRouter([
     Component: RegistrationPage,
   },
   {
-    path: '/partner/:partnerId',
-    Component: PartnerPage,
+    Component: PartnerLayout,
+    children: [
+      {
+        path: '/partner/:partnerId',
+        Component: PartnerPage,
+      },
+    ],
   },
 ])
 
