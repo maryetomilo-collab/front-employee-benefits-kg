@@ -6,6 +6,7 @@ import { createRoot } from 'react-dom/client'
 import { createBrowserRouter } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
 import './index.css'
+import PartnerPage from './pages/partner/PartnerPage'
 import RegistrationPage from './pages/registration/RegistrationPage'
 
 const queryClient = new QueryClient()
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
   {
     path: '/registration',
     Component: RegistrationPage,
+  },
+  {
+    path: '/partner/:partnerId',
+    Component: PartnerPage,
   },
 ])
 

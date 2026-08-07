@@ -10,8 +10,34 @@ servers:
 tags:
   - name: Partner Registration
     description: Регистрация партнёра и управление черновиком регистрации
+  - name: Partners
+    description: Получение данных партнёров
 
 paths:
+  /api/partners/{partnerId}:
+    get:
+      tags:
+        - Partners
+      summary: Получить данные партнёра
+      operationId: getPartner
+      parameters:
+        - name: partnerId
+          in: path
+          required: true
+          description: ID партнёра
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Данные партнёра
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerResponse'
+        '404':
+          description: Партнёр не найден
+
   /api/partner-registration/draft/business-info:
     put:
       tags:
@@ -104,6 +130,74 @@ paths:
 
 components:
   schemas:
+    PartnerResponse:
+      type: object
+      required:
+        - id
+        - name
+        - branches
+        - offers
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 3d0a4c2a-9d5c-4e4d-97cc-2c96a5f6b123
+
+        name:
+          type: string
+          example: Макаронная
+
+        branches:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerBranch'
+
+        offers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerOffer'
+
+    PartnerBranch:
+      type: object
+      required:
+        - id
+        - name
+        - address
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 7f4b6b3e-2d62-4d8e-b0d5-35f8c7c91a11
+
+        name:
+          type: string
+          example: Советская
+
+        address:
+          type: string
+          example: Советская, 345
+
+    PartnerOffer:
+      type: object
+      required:
+        - id
+        - name
+        - activationDate
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 1b4f02e8-a111-4c2a-9d5c-4e4d97cc2c96
+
+        name:
+          type: string
+          example: Скидка 10%
+
+        activationDate:
+          type: string
+          format: date
+          example: 2026-08-06
+
     SavePartnerRegistrationDraftBusinessInfoRequest:
       type: object
       required:
