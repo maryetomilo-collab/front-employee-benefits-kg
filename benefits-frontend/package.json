@@ -11,8 +11,10 @@
     "api:generate": "orval"
   },
   "dependencies": {
+    "@faker-js/faker": "^10.5.0",
     "@tanstack/react-query": "^5.101.1",
     "antd": "^6.5.0",
+    "msw": "^2.15.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-hook-form": "^7.80.0",

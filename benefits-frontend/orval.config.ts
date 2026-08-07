@@ -9,6 +9,15 @@ export default defineConfig({
       client: 'react-query',
       clean: true,
       formatter: 'prettier',
+      mock: {
+        indexMockFiles: true,
+        generators: [
+          {
+            type: 'msw',
+            useExamples: true,
+          },
+        ],
+      },
     },
     input: {
       target: './openapi/api.yaml',
