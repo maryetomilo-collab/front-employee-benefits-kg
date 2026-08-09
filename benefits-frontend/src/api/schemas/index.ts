@@ -14,6 +14,7 @@ export * from "./partnerRegistrationDraftContacts";
 export * from "./partnerRegistrationDraftResponse";
 export * from "./partnerRegistrationStep";
 export * from "./partnerResponse";
+export * from "./partnerStatistics";
 export * from "./savePartnerRegistrationDraftBusinessInfoRequest";
 export * from "./savePartnerRegistrationDraftContactInfoRequest";
 export * from "./submitPartnerRegistrationDraftResponse";

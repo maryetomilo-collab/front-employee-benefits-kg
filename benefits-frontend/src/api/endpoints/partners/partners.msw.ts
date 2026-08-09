@@ -12,6 +12,15 @@ import type { PartnerResponse } from "../../schemas";
 export const getGetPartnerResponseMock = (): PartnerResponse => ({
   id: "3d0a4c2a-9d5c-4e4d-97cc-2c96a5f6b123",
   name: "Макаронная",
+  statistics: {
+    activeOffers: 8,
+    totalOffers: 12,
+    availableCodes: 1256,
+    totalCodes: 2300,
+    usedCodes: 1044,
+    locationsCount: 5,
+    citiesCount: 2,
+  },
   branches: [
     {
       id: "7f4b6b3e-2d62-4d8e-b0d5-35f8c7c91a11",

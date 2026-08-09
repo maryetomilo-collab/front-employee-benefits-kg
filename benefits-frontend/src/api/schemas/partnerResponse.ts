@@ -6,10 +6,12 @@
  */
 import type { PartnerBranch } from "./partnerBranch";
 import type { PartnerOffer } from "./partnerOffer";
+import type { PartnerStatistics } from "./partnerStatistics";
 
 export interface PartnerResponse {
   id: string;
   name: string;
+  statistics: PartnerStatistics;
   branches: PartnerBranch[];
   offers: PartnerOffer[];
 }

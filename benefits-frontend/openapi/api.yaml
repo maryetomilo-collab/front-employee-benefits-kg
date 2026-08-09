@@ -38,6 +38,14 @@ paths:
               example:
                 id: "3d0a4c2a-9d5c-4e4d-97cc-2c96a5f6b123"
                 name: Макаронная
+                statistics:
+                  activeOffers: 8
+                  totalOffers: 12
+                  availableCodes: 1256
+                  totalCodes: 2300
+                  usedCodes: 1044
+                  locationsCount: 5
+                  citiesCount: 2
                 branches:
                   - id: "7f4b6b3e-2d62-4d8e-b0d5-35f8c7c91a11"
                     name: Советская
@@ -170,6 +178,7 @@ components:
       required:
         - id
         - name
+        - statistics
         - branches
         - offers
       properties:
@@ -182,6 +191,9 @@ components:
           type: string
           example: Макаронная
 
+        statistics:
+          $ref: '#/components/schemas/PartnerStatistics'
+
         branches:
           type: array
           items:
@@ -191,6 +203,59 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PartnerOffer'
+
+    PartnerStatistics:
+      type: object
+      required:
+        - activeOffers
+        - totalOffers
+        - availableCodes
+        - totalCodes
+        - usedCodes
+        - locationsCount
+        - citiesCount
+      properties:
+        activeOffers:
+          type: integer
+          minimum: 0
+          description: Количество активных офферов
+          example: 8
+
+        totalOffers:
+          type: integer
+          minimum: 0
+          description: Общее количество офферов
+          example: 12
+
+        availableCodes:
+          type: integer
+          minimum: 0
+          description: Количество доступных для использования кодов
+          example: 1256
+
+        totalCodes:
+          type: integer
+          minimum: 0
+          description: Общее количество выпущенных кодов
+          example: 2300
+
+        usedCodes:
+          type: integer
+          minimum: 0
+          description: Количество использованных кодов за всё время
+          example: 1044
+
+        locationsCount:
+          type: integer
+          minimum: 0
+          description: Количество точек партнёра
+          example: 5
+
+        citiesCount:
+          type: integer
+          minimum: 0
+          description: Количество городов присутствия партнёра
+          example: 2
 
     PartnerBranch:
       type: object
