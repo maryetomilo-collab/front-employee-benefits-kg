@@ -4,9 +4,30 @@
  * Employee Benefits API
  * OpenAPI spec version: 0.1.0
  */
+import type { PartnerOfferStatus } from "./partnerOfferStatus";
 
 export interface PartnerOffer {
   id: string;
   name: string;
+  status: PartnerOfferStatus;
+  /** Дата начала действия оффера */
   activationDate: string;
+  /** Дата окончания действия оффера */
+  expirationDate: string;
+  /**
+   * Количество кодов, доступных в рамках оффера
+   * @minimum 0
+   */
+  availableCodes: number;
+  /**
+   * Количество использованных кодов оффера
+   * @minimum 0
+   */
+  usedCodes: number;
+  /**
+   * Процент использованных кодов оффера
+   * @minimum 0
+   * @maximum 100
+   */
+  usagePercent: number;
 }

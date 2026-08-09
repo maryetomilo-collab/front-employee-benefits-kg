@@ -37,12 +37,22 @@ export const getGetPartnerResponseMock = (): PartnerResponse => ({
     {
       id: "1b4f02e8-a111-4c2a-9d5c-4e4d97cc2c96",
       name: "Скидка 10%",
+      status: "ACTIVE",
       activationDate: "2026-08-06",
+      expirationDate: "2026-09-06",
+      availableCodes: 320,
+      usedCodes: 210,
+      usagePercent: 66,
     },
     {
       id: "6a84f2b1-3907-47e4-9022-49d319114e88",
       name: "Бесплатный напиток к заказу",
+      status: "ACTIVE",
       activationDate: "2026-08-10",
+      expirationDate: "2026-09-10",
+      availableCodes: 150,
+      usedCodes: 98,
+      usagePercent: 65,
     },
   ],
 });

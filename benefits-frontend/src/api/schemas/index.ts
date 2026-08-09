@@ -9,6 +9,7 @@ export * from "./getPartnerRegistrationDraftResponse";
 export * from "./partnerBranch";
 export * from "./partnerCategory";
 export * from "./partnerOffer";
+export * from "./partnerOfferStatus";
 export * from "./partnerRegistrationDraftBusinessInfo";
 export * from "./partnerRegistrationDraftContacts";
 export * from "./partnerRegistrationDraftResponse";

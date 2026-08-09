@@ -8,6 +8,7 @@ import { Alert, Col, Flex, Row, Skeleton, theme } from "antd";
 import { useParams } from "react-router";
 import { useGetPartner } from "../../api/endpoints/partners/partners";
 import { AnalyticsCard } from "./ui/AnalyticsCard";
+import { OffersTable } from "./ui/OffersTable";
 
 export const PartnerPage = () => {
   const { token } = theme.useToken();
@@ -31,7 +32,7 @@ export const PartnerPage = () => {
       <Alert
         showIcon
         type="error"
-        message="Не удалось загрузить аналитику партнёра"
+        message="Не удалось загрузить данные партнёра"
       />
     );
   }
@@ -43,7 +44,7 @@ export const PartnerPage = () => {
       : "городах";
 
   return (
-    <Flex style={{ width: "100%" }}>
+    <Flex vertical gap={token.marginLG} style={{ width: "100%" }}>
       <Row gutter={[token.marginMD, token.marginMD]} style={{ width: "100%" }}>
         <Col xs={24} md={12} lg={6}>
           <AnalyticsCard
@@ -82,6 +83,7 @@ export const PartnerPage = () => {
           />
         </Col>
       </Row>
+      <OffersTable offers={partner.offers} />
     </Flex>
   );
 };
