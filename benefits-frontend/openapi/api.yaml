@@ -12,6 +12,8 @@ tags:
     description: Регистрация партнёра и управление черновиком регистрации
   - name: Partners
     description: Получение данных партнёров
+  - name: Partner Offers
+    description: Управление офферами текущего партнёра
 
 paths:
   /api/partners/{partnerId}:
@@ -72,6 +74,37 @@ paths:
                     usagePercent: 65
         '404':
           description: Партнёр не найден
+
+  /api/partner/offers:
+    get:
+      tags:
+        - Partner Offers
+      summary: Получить офферы текущего партнёра
+      description: Получить все офферы, принадлежащие текущему авторизованному партнёру
+      operationId: getPartnerOffers
+      responses:
+        '200':
+          description: Список офферов текущего партнёра
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerOffersResponse'
+              examples:
+                offers:
+                  summary: Офферы найдены
+                  value:
+                    offers:
+                      - id: "c148461f-2364-47a4-9951-afc89efdf199"
+                        title: Скидка 20% на кофе
+                        status: ACTIVE
+                        validFrom: "2026-08-01"
+                        validTo: "2026-08-31"
+                        availableCodes: 74
+                        totalCodes: 100
+                empty:
+                  summary: Офферов нет
+                  value:
+                    offers: []
 
   /api/partner-registration/draft/business-info:
     put:
@@ -350,6 +383,56 @@ components:
         - DRAFT
         - ARCHIVED
       example: ACTIVE
+
+    PartnerOffersResponse:
+      type: object
+      required:
+        - offers
+      properties:
+        offers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerOfferListItemResponse'
+
+    PartnerOfferListItemResponse:
+      type: object
+      required:
+        - id
+        - title
+        - status
+        - validFrom
+        - validTo
+        - availableCodes
+        - totalCodes
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        status:
+          $ref: '#/components/schemas/OfferStatus'
+        validFrom:
+          type: string
+          format: date
+        validTo:
+          type: string
+          format: date
+        availableCodes:
+          type: integer
+          format: int64
+          minimum: 0
+        totalCodes:
+          type: integer
+          format: int64
+          minimum: 0
+
+    OfferStatus:
+      type: string
+      enum:
+        - DRAFT
+        - ACTIVE
+        - EXPIRED
 
     SavePartnerRegistrationDraftBusinessInfoRequest:
       type: object

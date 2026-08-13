@@ -7,6 +7,7 @@ import { createBrowserRouter } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
 import './index.css'
 import PartnerLayout from './app/router/PartnerLayout'
+import { PartnerOffersPage } from './pages/partner-offers/PartnerOffersPage'
 import PartnerPage from './pages/partner/PartnerPage'
 import RegistrationPage from './pages/registration/RegistrationPage'
 
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: '/partner/:partnerId',
         Component: PartnerPage,
+      },
+      {
+        path: '/partner/offers',
+        Component: PartnerOffersPage,
       },
     ],
   },

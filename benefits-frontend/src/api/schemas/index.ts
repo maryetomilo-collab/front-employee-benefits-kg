@@ -6,9 +6,12 @@
  */
 
 export * from "./getPartnerRegistrationDraftResponse";
+export * from "./offerStatus";
 export * from "./partnerBranch";
 export * from "./partnerCategory";
 export * from "./partnerOffer";
+export * from "./partnerOfferListItemResponse";
+export * from "./partnerOffersResponse";
 export * from "./partnerOfferStatus";
 export * from "./partnerRegistrationDraftBusinessInfo";
 export * from "./partnerRegistrationDraftContacts";
