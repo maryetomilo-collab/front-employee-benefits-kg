@@ -10,7 +10,7 @@ import { useGetPartner } from "../../api/endpoints/partners/partners";
 import { AnalyticsCard } from "./ui/AnalyticsCard";
 import { OffersTable } from "./ui/OffersTable";
 
-export const PartnerPage = () => {
+const PartnerPage = () => {
   const { token } = theme.useToken();
   const { partnerId = "" } = useParams();
   const partnerQuery = useGetPartner(partnerId, {

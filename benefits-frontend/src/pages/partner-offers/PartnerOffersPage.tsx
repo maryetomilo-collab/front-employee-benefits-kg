@@ -3,7 +3,7 @@ import { Alert, Button, Flex, Typography } from "antd";
 import { useGetPartnerOffers } from "../../api/endpoints/partner-offers/partner-offers";
 import { PartnerOffersTable } from "./ui/PartnerOffersTable";
 
-export function PartnerOffersPage() {
+function PartnerOffersPage() {
   const partnerOffersQuery = useGetPartnerOffers();
   const response = partnerOffersQuery.data;
   const isSuccessResponse =
@@ -45,3 +45,5 @@ export function PartnerOffersPage() {
     </Flex>
   );
 }
+
+export default PartnerOffersPage;

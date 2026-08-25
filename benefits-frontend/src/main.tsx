@@ -7,9 +7,10 @@ import { createBrowserRouter } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
 import './index.css'
 import PartnerLayout from './app/router/PartnerLayout'
-import { PartnerOffersPage } from './pages/partner-offers/PartnerOffersPage'
-import PartnerPage from './pages/partner/PartnerPage'
-import RegistrationPage from './pages/registration/RegistrationPage'
+import CreateOfferPage from './pages/create-offer'
+import PartnerOffersPage from './pages/partner-offers'
+import PartnerPage from './pages/partner'
+import RegistrationPage from './pages/registration'
 
 const queryClient = new QueryClient()
 
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: '/partner/offers',
         Component: PartnerOffersPage,
+      },
+      {
+        path: '/partner/offers/new',
+        Component: CreateOfferPage,
       },
     ],
   },
