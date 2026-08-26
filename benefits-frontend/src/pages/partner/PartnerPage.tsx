@@ -5,13 +5,14 @@ import {
   TagsOutlined,
 } from "@ant-design/icons";
 import { Alert, Col, Flex, Row, Skeleton, theme } from "antd";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useGetPartner } from "../../api/endpoints/partners/partners";
 import { AnalyticsCard } from "./ui/AnalyticsCard";
 import { OffersTable } from "./ui/OffersTable";
 
 const PartnerPage = () => {
   const { token } = theme.useToken();
+  const navigate = useNavigate();
   const { partnerId = "" } = useParams();
   const partnerQuery = useGetPartner(partnerId, {
     query: { enabled: Boolean(partnerId) },
@@ -42,6 +43,9 @@ const PartnerPage = () => {
     statistics.citiesCount % 10 === 1 && statistics.citiesCount % 100 !== 11
       ? "городе"
       : "городах";
+  const handleAddOffer = () => {
+    void navigate("/partner/offers/new");
+  };
 
   return (
     <Flex vertical gap={token.marginLG} style={{ width: "100%" }}>
@@ -83,7 +87,7 @@ const PartnerPage = () => {
           />
         </Col>
       </Row>
-      <OffersTable offers={partner.offers} />
+      <OffersTable offers={partner.offers} onAddOffer={handleAddOffer} />
     </Flex>
   );
 };

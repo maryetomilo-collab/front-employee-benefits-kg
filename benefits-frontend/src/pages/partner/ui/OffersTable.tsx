@@ -1,4 +1,5 @@
-import { Card, Flex, Progress, Table, Tag, Typography, theme } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { Button, Card, Flex, Progress, Table, Tag, Typography, theme } from "antd";
 import type { TableColumnsType } from "antd";
 import { PartnerOfferStatus, type PartnerOffer } from "../../../api/schemas";
 
@@ -84,14 +85,20 @@ const columns: TableColumnsType<PartnerOffer> = [
 
 type OffersTableProps = {
   offers: PartnerOffer[];
+  onAddOffer: () => void;
 };
 
-export function OffersTable({ offers }: OffersTableProps) {
+export function OffersTable({ offers, onAddOffer }: OffersTableProps) {
   const { token } = theme.useToken();
 
   return (
     <Card
       title="Мои офферы"
+      extra={
+        <Button type="primary" icon={<PlusOutlined />} onClick={onAddOffer}>
+          Добавить оффер
+        </Button>
+      }
       styles={{
         header: {
           paddingInline: token.paddingMD,
