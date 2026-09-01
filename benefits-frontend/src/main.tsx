@@ -8,6 +8,7 @@ import { RouterProvider } from 'react-router/dom'
 import './index.css'
 import PartnerLayout from './app/router/PartnerLayout'
 import CreateOfferPage from './pages/create-offer'
+import PartnerOfferPage from './pages/partner-offer'
 import PartnerOffersPage from './pages/partner-offers'
 import PartnerPage from './pages/partner'
 import RegistrationPage from './pages/registration'
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: '/partner/offers/new',
         Component: CreateOfferPage,
+      },
+      {
+        path: '/partner/offers/:offersId',
+        Component: PartnerOfferPage,
       },
     ],
   },
